@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_URL || 'https://chor-app-backend-production.up.railway.app'
+const API_URL = import.meta.env.VITE_API_URL || 'https://choir-app-backend-production.up.railway.app'
 
 class ApiClient {
     constructor() {
