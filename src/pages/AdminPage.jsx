@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Settings, Plus, Calendar, Library, Users, Copy, Check } from 'lucide-react'
+import { Settings, Library, Users, Copy, Check } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { useState } from 'react'
 
@@ -73,42 +73,26 @@ function AdminPage() {
                         {copied ? <Check size={18} /> : <Copy size={18} />}
                     </button>
                 </div>
+
+                <p style={{
+                    fontSize: '0.8rem',
+                    color: 'var(--color-text-muted)',
+                    marginTop: '8px'
+                }}>
+                    Поділіться цим кодом з учасниками хору
+                </p>
             </div>
 
             {/* Admin actions */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <Link to="/admin/repertoire" className="song-card" style={{ textDecoration: 'none' }}>
-                    <span className="song-card__number" style={{ background: 'var(--color-accent)' }}>
-                        <Calendar size={16} />
-                    </span>
-                    <div className="song-card__content">
-                        <h3 className="song-card__title">Репертуар на сьогодні</h3>
-                        <div className="song-card__categories">
-                            <span className="song-card__category">Призначити пісні</span>
-                        </div>
-                    </div>
-                </Link>
-
-                <Link to="/admin/add-song" className="song-card" style={{ textDecoration: 'none' }}>
-                    <span className="song-card__number" style={{ background: 'var(--color-success)' }}>
-                        <Plus size={16} />
-                    </span>
-                    <div className="song-card__content">
-                        <h3 className="song-card__title">Додати нову пісню</h3>
-                        <div className="song-card__categories">
-                            <span className="song-card__category">Завантажити PDF</span>
-                        </div>
-                    </div>
-                </Link>
-
                 <Link to="/admin/library" className="song-card" style={{ textDecoration: 'none' }}>
-                    <span className="song-card__number" style={{ background: 'var(--color-border)' }}>
+                    <span className="song-card__number" style={{ background: 'var(--color-accent-secondary)' }}>
                         <Library size={16} />
                     </span>
                     <div className="song-card__content">
-                        <h3 className="song-card__title">Додати з бібліотеки</h3>
+                        <h3 className="song-card__title">Бібліотека пісень</h3>
                         <div className="song-card__categories">
-                            <span className="song-card__category">Готові пісні</span>
+                            <span className="song-card__category">Всі завантажені пісні</span>
                         </div>
                     </div>
                 </Link>

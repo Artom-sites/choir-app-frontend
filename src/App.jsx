@@ -3,13 +3,13 @@ import { useEffect } from 'react'
 import { Home, Search, FolderOpen, Settings, Music } from 'lucide-react'
 import LoadingScreen from './components/LoadingScreen'
 import BottomNav from './components/BottomNav'
-import FloatingActionButton from './components/FloatingActionButton'
 import ChoirSelector from './pages/ChoirSelector'
 import JoinChoirPage from './pages/JoinChoirPage'
 import CreateChoirPage from './pages/CreateChoirPage'
 import SearchChoirPage from './pages/SearchChoirPage'
 import HomePage from './pages/HomePage'
 import SearchPage from './pages/SearchPage'
+import SongsPage from './pages/SongsPage'
 import CategoriesPage from './pages/CategoriesPage'
 import CategorySongsPage from './pages/CategorySongsPage'
 import SongPage from './pages/SongPage'
@@ -146,6 +146,7 @@ function AppRoutes() {
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/search" element={<SearchPage />} />
+              <Route path="/songs" element={<SongsPage />} />
               <Route path="/categories" element={<CategoriesPage />} />
               <Route path="/categories/:categoryId" element={<CategorySongsPage />} />
               <Route path="/song/:songId" element={<SongPage />} />
@@ -157,7 +158,6 @@ function AppRoutes() {
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </main>
-          <FloatingActionButton />
           <BottomNav />
         </div>
       </div>

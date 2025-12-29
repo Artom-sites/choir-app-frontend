@@ -168,6 +168,23 @@ body::before {
   height: 24px;
 }
 
+.nav-item--plus {
+  background: var(--color-accent);
+  color: white;
+  border: none;
+  cursor: pointer;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  padding: 0;
+  margin: -8px 0;
+}
+
+.nav-item--plus.active {
+  background: var(--color-surface-elevated);
+  color: var(--color-text);
+}
+
 /* ---------- Choir Selector Page ---------- */
 .choir-selector {
   display: flex;
