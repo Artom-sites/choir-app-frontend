@@ -177,75 +177,69 @@ body::before {
   display: flex;
   flex-direction: column;
   min-height: calc(100vh - var(--nav-height));
-  padding: var(--spacing-xl) var(--spacing-lg);
-  padding-top: calc(var(--spacing-xl) + var(--safe-top));
+  padding: var(--spacing-lg);
+  padding-top: calc(var(--spacing-lg) + var(--safe-top));
 }
 
 .choir-selector__header {
   text-align: center;
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: var(--spacing-lg);
 }
 
 .choir-selector__icon {
-  font-size: 3rem;
-  margin-bottom: var(--spacing-md);
+  font-size: 2rem;
+  margin-bottom: var(--spacing-sm);
   display: block;
 }
 
 .choir-selector__title {
-  font-size: 1.75rem;
-  font-weight: 700;
+  font-size: 1.35rem;
+  font-weight: 600;
   letter-spacing: -0.02em;
-  margin-bottom: var(--spacing-xs);
-  background: linear-gradient(135deg, var(--color-text), var(--color-accent-light));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  margin-bottom: 4px;
 }
 
 .choir-selector__subtitle {
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   color: var(--color-text-muted);
 }
 
 .choir-selector__options {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
+  gap: var(--spacing-sm);
   flex: 1;
 }
 
-/* Option cards (Join/Create) */
+/* Option cards (Join/Create) - Compact */
 .option-card {
   display: flex;
   align-items: center;
-  gap: var(--spacing-lg);
-  padding: var(--spacing-lg);
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-md);
   text-decoration: none;
   color: inherit;
-  transition: all 0.25s ease;
+  transition: all 0.2s ease;
 }
 
 .option-card:hover {
   background: var(--color-surface-elevated);
   border-color: var(--color-accent-dim);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-accent);
 }
 
 .option-card__icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 56px;
-  height: 56px;
-  border-radius: var(--radius-lg);
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
   background: linear-gradient(135deg, var(--color-accent), var(--color-accent-secondary));
   color: white;
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   flex-shrink: 0;
 }
 
@@ -254,13 +248,13 @@ body::before {
 }
 
 .option-card__title {
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   font-weight: 600;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 .option-card__description {
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   color: var(--color-text-muted);
 }
 
@@ -271,7 +265,6 @@ body::before {
 
 .option-card:hover .option-card__arrow {
   color: var(--color-accent-light);
-  transform: translateX(4px);
 }
 
 /* Choir list */
