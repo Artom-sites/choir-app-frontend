@@ -83,7 +83,17 @@ class ApiClient {
         })
     }
 
-    // Songs
+    async searchChoirs(query) {
+        return this.request(`/api/choirs/search?q=${encodeURIComponent(query)}`)
+    }
+
+    async requestJoinChoir(choirId) {
+        return this.request(`/api/choirs/${choirId}/request-join`, {
+            method: 'POST'
+        })
+    }
+
+
     async getSongs(params = {}) {
         const query = new URLSearchParams()
         if (params.choirId) query.set('choirId', params.choirId)

@@ -6,6 +6,7 @@ import BottomNav from './components/BottomNav'
 import ChoirSelector from './pages/ChoirSelector'
 import JoinChoirPage from './pages/JoinChoirPage'
 import CreateChoirPage from './pages/CreateChoirPage'
+import SearchChoirPage from './pages/SearchChoirPage'
 import HomePage from './pages/HomePage'
 import SearchPage from './pages/SearchPage'
 import CategoriesPage from './pages/CategoriesPage'
@@ -17,6 +18,7 @@ import SetRepertoirePage from './pages/SetRepertoirePage'
 import AddFromLibraryPage from './pages/AddFromLibraryPage'
 import { AuthProvider, useAuth } from './context/AuthContext'
 import { SongsProvider } from './context/SongsContext'
+
 
 function Sidebar() {
   const { currentChoir, isAdmin, clearChoir } = useAuth()
@@ -123,11 +125,13 @@ function AppRoutes() {
             <Route path="/" element={<ChoirSelector />} />
             <Route path="/join" element={<JoinChoirPage />} />
             <Route path="/create" element={<CreateChoirPage />} />
+            <Route path="/search-choir" element={<SearchChoirPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>
       </div>
     )
+
   }
 
   // Choir selected - show full app with sidebar
