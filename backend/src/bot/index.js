@@ -37,27 +37,10 @@ export function createBot(token, webappUrl) {
         return null
     }
 
-    // /start command
+    // /start command - just register user, no message (Bot Description is shown instead)
     bot.command('start', async (ctx) => {
-        const user = getOrCreateUser(ctx.from)
-
-        const keyboard = createKeyboard()
-
-        const message = `Вітаю, ${ctx.from.first_name}! 🎵
-
-Це бот для хорового репертуару.
-
-📋 Команди:
-/create_choir Назва - Створити хор
-/join КОД - Приєднатися до хору
-/my_choirs - Мої хори
-/help - Допомога`
-
-        if (keyboard) {
-            await ctx.reply(message + '\n\nАбо натисніть кнопку нижче:', { reply_markup: keyboard })
-        } else {
-            await ctx.reply(message)
-        }
+        getOrCreateUser(ctx.from)
+        // No message - Bot Description stays visible
     })
 
     // /help command
