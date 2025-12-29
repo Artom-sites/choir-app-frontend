@@ -56,13 +56,35 @@ function SongPage() {
                 <hr className="song-page__divider" />
 
                 {pdfUrl ? (
-                    <button
-                        className="song-page__open-btn"
-                        onClick={() => setShowPDF(true)}
-                    >
-                        <FileText size={24} />
-                        Відкрити ноти
-                    </button>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                        <button
+                            className="song-page__open-btn"
+                            onClick={() => setShowPDF(true)}
+                        >
+                            <FileText size={24} />
+                            Відкрити ноти
+                        </button>
+                        <a
+                            href={pdfUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: '8px',
+                                padding: '12px',
+                                background: 'var(--color-surface)',
+                                border: '1px solid var(--color-border)',
+                                borderRadius: 'var(--radius-md)',
+                                color: 'var(--color-text-secondary)',
+                                textDecoration: 'none',
+                                fontSize: '0.9rem'
+                            }}
+                        >
+                            📄 Відкрити у браузері
+                        </a>
+                    </div>
                 ) : (
                     <div style={{
                         padding: '24px',
