@@ -56,7 +56,7 @@ export function createBot(token, webappUrl) {
             return ctx.reply('❌ Будь ласка, надішліть PDF файл.')
         }
 
-        const analyzingMsg = await ctx.reply('⏳ Отримано PDF. Завантажую в хмару...')
+        const analyzingMsg = await ctx.reply('⏳ Отримано PDF. Обробка...')
 
         try {
             // 2. Get file link from Telegram
@@ -70,68 +70,103 @@ export function createBot(token, webappUrl) {
                 responseType: 'stream'
             })
 
-            // 4. Upload to Cloudinary (Stream)
-            // resource_type: 'auto' allows PDF to be served as inline
-            // type: 'upload' makes it valid for public access (no signed URL needed)
-            const uploadStream = cloudinary.uploader.upload_stream(
-                {
-                    folder: 'choir-songs',
-                    resource_type: 'auto',
-                    type: 'upload',
-                    public_id: `song_${Date.now()}_${doc.file_name.replace(/\.[^/.]+$/, "")}` // remove extension for id
-                },
-                (error, result) => {
-                    if (error) {
-                        console.error('Cloudinary upload error:', error)
-                        return ctx.api.editMessageText(ctx.chat.id, analyzingMsg.message_id, '❌ Помилка завантаження в хмару.')
-                    }
+            // Check if Cloudinary is configured
+            const isCloudinaryReady = process.env.CLOUDINARY_CLOUD_NAME &&
+                process.env.CLOUDINARY_API_KEY &&
+                process.env.CLOUDINARY_API_SECRET
 
-                    // 5. Save to Database
-                    try {
-                        // Use filename as title, remove extension
-                        const title = doc.file_name.replace(/\.pdf$/i, '')
+            let publicUrl = ''
 
-                        // Default to 'Інше' category (id=10) or NULL
-                        // Assuming category_id is linked via song_categories table, we insert song first
-                        // Schema: songs (title, author, ..., pdf_path)
-                        // Wait, schema might not have pdf_path directly? Let's check schema.
-                        // Assuming songs has pdf_path or similar.
-                        // Re-checking schema via tool call before this would have been ideal but I'll assume standard 
-                        // from previous context songs.js used 'pdf_url' or 'pdf_path'.
-                        // Looking at songs.js: "const { pdfPath } = req.file" (from multer-storage-cloudinary).
-                        // It usually maps to `pdf_path` in DB if I look at my previous edits or schema.
-                        // I will assume `pdf_path` column exists.
+            if (isCloudinaryReady) {
+                // 4a. Upload to Cloudinary
+                await new Promise((resolve, reject) => {
+                    const uploadStream = cloudinary.uploader.upload_stream(
+                        {
+                            folder: 'choir-songs',
+                            resource_type: 'auto',
+                            type: 'upload',
+                            public_id: `song_${Date.now()}_${doc.file_name.replace(/\.[^/.]+$/, "")}`
+                        },
+                        (error, result) => {
+                            if (error) reject(error)
+                            else {
+                                publicUrl = result.secure_url
+                                resolve(result)
+                            }
+                        }
+                    )
+                    response.data.pipe(uploadStream)
+                })
+            } else {
+                console.log('⚠️ Cloudinary not configured. Using local storage.')
+                // 4b. Save Locally
+                const fs = await import('fs')
+                const path = await import('path')
+                const { fileURLToPath } = await import('url')
 
-                        const stmt = db.prepare(`
-                            INSERT INTO songs (title, pdf_path, is_public, author)
-                            VALUES (?, ?, 1, ?)
-                        `)
-                        const info = stmt.run(title, result.secure_url, 'Невідомий') // Author unknown
+                // ES Modules __dirname equivalent
+                const __filename = fileURLToPath(import.meta.url)
+                const __dirname = path.dirname(__filename)
 
-                        // Link to 'Інше' category (id=10) by default? 
-                        // Better to leave category empty and let user assign in app.
-                        // But songs need to be in `song_categories` to be found by category?
-                        // If `AddFromLibraryPage` lists ALL songs in `songs` table, then we are good.
-                        // Let's assume standard insert.
-
-                        ctx.api.editMessageText(
-                            ctx.chat.id,
-                            analyzingMsg.message_id,
-                            `✅ **${title}** збережено!\n\nТепер ви можете знайти цю пісню в "Бібліотеці" і додати до репертуару.`
-                        )
-                    } catch (dbError) {
-                        console.error('DB save error:', dbError)
-                        ctx.api.editMessageText(ctx.chat.id, analyzingMsg.message_id, '❌ Помилка збереження в базу даних.')
-                    }
+                const uploadsDir = path.join(__dirname, '../../uploads/choir-songs')
+                if (!fs.existsSync(uploadsDir)) {
+                    fs.mkdirSync(uploadsDir, { recursive: true })
                 }
-            )
 
-            // Pipe axios stream to cloudinary
-            response.data.pipe(uploadStream)
+                const filename = `song_${Date.now()}_${doc.file_name}`
+                const filePath = path.join(uploadsDir, filename)
+                const writer = fs.createWriteStream(filePath)
+
+                response.data.pipe(writer)
+
+                await new Promise((resolve, reject) => {
+                    writer.on('finish', resolve)
+                    writer.on('error', reject)
+                })
+
+                // Construct Local URL (assuming backend is serving /uploads)
+                // Note: WEBAPP_URL might be frontend (5173). We need BACKEND_URL or just current host.
+                // Assuming backend runs on PORT (3000).
+                const port = process.env.PORT || 3000
+                // Use a tunnel URL if available? No, just localhost.
+                publicUrl = `http://localhost:${port}/uploads/choir-songs/${filename}`
+            }
+
+            // 5. Save to Database
+            const title = doc.file_name.replace(/\.pdf$/i, '')
+            try {
+                const stmt = db.prepare(`
+                    INSERT INTO songs (title, pdf_path, is_public, author)
+                    VALUES (?, ?, 1, ?)
+                `)
+                const result = stmt.run(title, publicUrl, 'Невідомий')
+                const songId = result.lastInsertRowid
+
+                // Auto-assign to "Інше" category (ID 10)
+                const categoryStmt = db.prepare(`
+                    INSERT INTO song_categories (song_id, category_id)
+                    VALUES (?, 10)
+                `)
+                categoryStmt.run(songId)
+
+                let msg = `✅ **${title}** збережено!`
+                if (!isCloudinaryReady) {
+                    msg += `\n\n⚠️ Локальне сховище (доступно тільки на цьому ПК).`
+                }
+                msg += `\nПісня додана до категорії "Інше".`
+
+                ctx.api.editMessageText(ctx.chat.id, analyzingMsg.message_id, msg)
+
+            } catch (dbError) {
+                console.error('DB save error:', dbError)
+                ctx.api.editMessageText(ctx.chat.id, analyzingMsg.message_id, '❌ Помилка збереження в базу даних.')
+            }
 
         } catch (err) {
             console.error('Bot upload error:', err)
-            ctx.api.editMessageText(ctx.chat.id, analyzingMsg.message_id, '❌ Помилка обробки файлу.')
+            let errMsg = '❌ Помилка обробки файлу.'
+            if (err.message && err.message.includes('Cloudinary')) errMsg = '❌ Помилка Cloudinary.'
+            ctx.api.editMessageText(ctx.chat.id, analyzingMsg.message_id, errMsg)
         }
     })
 

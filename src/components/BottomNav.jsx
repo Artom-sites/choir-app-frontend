@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
-import { Home, Search, Music, Plus, Settings, X, Calendar } from 'lucide-react'
+import { Home, Search, Music, Plus, Settings, X, Calendar, FileUp } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 
 function BottomNav() {
@@ -10,7 +10,16 @@ function BottomNav() {
 
     const handleAddSong = () => {
         setShowMenu(false)
-        navigate('/admin/add-song')
+        // Show instruction to use bot
+        if (window.Telegram?.WebApp) {
+            window.Telegram.WebApp.showPopup({
+                title: '📤 Додати пісню',
+                message: 'Щоб додати нову пісню, надішліть PDF файл боту @musicviewer_bot у Telegram.\n\nПісня автоматично з\'явиться в категорії "Інше".',
+                buttons: [{ type: 'ok' }]
+            })
+        } else {
+            alert('Щоб додати нову пісню, надішліть PDF файл боту @musicviewer_bot у Telegram.')
+        }
     }
 
     const handleAddRepertoire = () => {
@@ -33,9 +42,9 @@ function BottomNav() {
                 <div className="fab-menu">
                     <button className="fab-menu__item" onClick={handleAddSong}>
                         <div className="fab-menu__icon" style={{ background: 'var(--color-accent)' }}>
-                            <Music size={20} />
+                            <FileUp size={20} />
                         </div>
-                        <span>Додати пісню</span>
+                        <span>Додати пісню (через бота)</span>
                     </button>
                     <button className="fab-menu__item" onClick={handleAddRepertoire}>
                         <div className="fab-menu__icon" style={{ background: 'var(--color-accent-secondary)' }}>
