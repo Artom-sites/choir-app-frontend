@@ -47,7 +47,8 @@ function BotSongsPage() {
             await refresh()
         } catch (err) {
             console.error('Failed to update category:', err)
-            alert('Помилка оновлення категорії')
+            // Show actual error message
+            alert(`Помилка: ${err.message}`)
         } finally {
             setUpdating(false)
         }
@@ -81,6 +82,11 @@ function BotSongsPage() {
             }}>
                 Тут відображаються пісні, завантажені через бота.
                 Призначте їм категорію або перегляньте.
+            </p>
+
+            {/* Debug - remove after testing */}
+            <p style={{ fontSize: '0.7rem', color: '#666', marginBottom: '8px' }}>
+                Debug: userId = {api.userId || 'NOT SET'}
             </p>
 
             {loading ? (
