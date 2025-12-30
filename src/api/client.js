@@ -134,6 +134,12 @@ class ApiClient {
         return response.json()
     }
 
+    async sendPdf(songId) {
+        return this.request(`/api/songs/${songId}/send-pdf`, {
+            method: 'POST'
+        })
+    }
+
     async addSongToChoir(choirId, songId) {
         return this.request(`/api/songs/choir/${choirId}/add/${songId}`, {
             method: 'POST'

@@ -116,42 +116,25 @@ function SetRepertoirePage() {
                                 return (
                                     <div
                                         key={songId}
-                                        style={{
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            gap: '8px',
-                                            padding: '12px',
-                                            background: 'rgba(201, 162, 39, 0.1)',
-                                            border: '1px solid var(--color-accent)',
-                                            borderRadius: '8px',
-                                            marginBottom: '8px'
-                                        }}
+                                        className="song-card"
+                                        style={{ cursor: 'default', paddingRight: '0' }}
                                     >
-                                        <span style={{
-                                            width: '24px',
-                                            height: '24px',
-                                            background: 'var(--color-accent)',
-                                            color: 'var(--color-primary)',
-                                            borderRadius: '50%',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            fontSize: '0.75rem',
-                                            fontWeight: '700'
-                                        }}>
+                                        <span className="song-card__number">
                                             {index + 1}
                                         </span>
-                                        <span style={{ flex: 1 }}>{song.title}</span>
-                                        <div style={{ display: 'flex', gap: '4px' }}>
+                                        <div className="song-card__content">
+                                            <div className="song-card__title">{song.title}</div>
+                                        </div>
+                                        <div style={{ display: 'flex', gap: '8px' }}>
                                             <button
                                                 onClick={() => moveSong(songId, 'up')}
                                                 disabled={index === 0}
                                                 style={{
                                                     background: 'none',
                                                     border: 'none',
-                                                    color: index === 0 ? 'var(--color-border)' : 'var(--color-text-muted)',
+                                                    color: index === 0 ? 'var(--color-border)' : 'var(--color-text-secondary)',
                                                     cursor: index === 0 ? 'default' : 'pointer',
-                                                    padding: '4px'
+                                                    padding: '8px'
                                                 }}
                                             >
                                                 ↑
@@ -162,9 +145,9 @@ function SetRepertoirePage() {
                                                 style={{
                                                     background: 'none',
                                                     border: 'none',
-                                                    color: index === selectedSongs.length - 1 ? 'var(--color-border)' : 'var(--color-text-muted)',
+                                                    color: index === selectedSongs.length - 1 ? 'var(--color-border)' : 'var(--color-text-secondary)',
                                                     cursor: index === selectedSongs.length - 1 ? 'default' : 'pointer',
-                                                    padding: '4px'
+                                                    padding: '8px'
                                                 }}
                                             >
                                                 ↓
@@ -176,10 +159,10 @@ function SetRepertoirePage() {
                                                     border: 'none',
                                                     color: 'var(--color-error)',
                                                     cursor: 'pointer',
-                                                    padding: '4px'
+                                                    padding: '8px'
                                                 }}
                                             >
-                                                <X size={18} />
+                                                <X size={20} />
                                             </button>
                                         </div>
                                     </div>

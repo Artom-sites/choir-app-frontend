@@ -1,6 +1,6 @@
-import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Music, ChevronRight } from 'lucide-react'
+import { Music } from 'lucide-react'
+import SongCard from '../components/SongCard'
 import { useSongs } from '../context/SongsContext'
 
 function SongsPage() {
@@ -43,22 +43,10 @@ function SongsPage() {
                 ) : (
                     <div className="songs-list">
                         {categorySongs.map(song => (
-                            <Link
+                            <SongCard
                                 key={song.id}
-                                to={`/song/${song.id}`}
-                                className="song-card"
-                            >
-                                <div className="song-card__icon">
-                                    <Music size={20} />
-                                </div>
-                                <div className="song-card__info">
-                                    <div className="song-card__title">{song.title}</div>
-                                    {song.author && (
-                                        <div className="song-card__author">{song.author}</div>
-                                    )}
-                                </div>
-                                <ChevronRight size={18} className="song-card__arrow" />
-                            </Link>
+                                song={song}
+                            />
                         ))}
                     </div>
                 )}

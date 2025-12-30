@@ -1,5 +1,6 @@
+import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { ArrowLeft, FileText } from 'lucide-react'
+import { ArrowLeft, FileText, Send, Loader } from 'lucide-react'
 import { useSongs } from '../context/SongsContext'
 import api from '../api/client'
 
@@ -7,6 +8,9 @@ function SongPage() {
     const { songId } = useParams()
     const navigate = useNavigate()
     const { getSongById } = useSongs()
+    const [sending, setSending] = useState(false)
+    const [sent, setSent] = useState(false)
+    const [error, setError] = useState(null)
 
     const song = getSongById(songId)
 
@@ -26,19 +30,25 @@ function SongPage() {
     }
 
     const categoryNames = song.categories?.map(c => c.name).filter(Boolean) || []
-    const pdfUrl = api.getPdfUrl(song.pdfPath)
 
-    // Open PDF using Telegram's built-in viewer
-    const openPdfInTelegram = () => {
-        if (!pdfUrl) return
+    // Send PDF via Telegram bot
+    const sendPdfToTelegram = async () => {
+        if (sending || sent) return
 
-        // Use Telegram WebApp API to open link
-        // This opens the PDF in Telegram's native viewer
-        if (window.Telegram?.WebApp?.openLink) {
-            window.Telegram.WebApp.openLink(pdfUrl)
-        } else {
-            // Fallback for development/browser
-            window.open(pdfUrl, '_blank')
+        setSending(true)
+        setError(null)
+
+        try {
+            await api.sendPdf(song.id)
+            setSent(true)
+
+            // Show success briefly
+            setTimeout(() => setSent(false), 3000)
+        } catch (err) {
+            console.error('Error sending PDF:', err)
+            setError('Не вдалося надіслати. Спробуйте ще раз.')
+        } finally {
+            setSending(false)
         }
     }
 
@@ -51,6 +61,10 @@ function SongPage() {
 
             <h1 className="song-page__title">{song.title}</h1>
 
+            {song.author && (
+                <p className="song-page__author">{song.author}</p>
+            )}
+
             {categoryNames.length > 0 && (
                 <div className="song-page__categories">
                     {categoryNames.map(name => (
@@ -61,13 +75,28 @@ function SongPage() {
 
             <hr className="song-page__divider" />
 
-            {pdfUrl ? (
+            {song.pdfPath ? (
                 <button
                     className="song-page__open-btn"
-                    onClick={openPdfInTelegram}
+                    onClick={sendPdfToTelegram}
+                    disabled={sending}
+                    style={sent ? { background: 'var(--color-success)' } : {}}
                 >
-                    <FileText size={24} />
-                    Відкрити ноти
+                    {sending ? (
+                        <>
+                            <Loader size={24} className="spinning" />
+                            Надсилаємо...
+                        </>
+                    ) : sent ? (
+                        <>
+                            ✓ Надіслано в Telegram
+                        </>
+                    ) : (
+                        <>
+                            <Send size={24} />
+                            Отримати ноти
+                        </>
+                    )}
                 </button>
             ) : (
                 <div style={{
@@ -79,6 +108,12 @@ function SongPage() {
                 }}>
                     📄 PDF ще не завантажено
                 </div>
+            )}
+
+            {error && (
+                <p style={{ color: 'var(--color-error)', marginTop: '12px', textAlign: 'center' }}>
+                    {error}
+                </p>
             )}
         </div>
     )

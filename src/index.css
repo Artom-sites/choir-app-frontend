@@ -5,59 +5,65 @@
 
 /* ---------- CSS Variables ---------- */
 :root {
-  /* Colors - Pure Dark Premium */
-  --color-background: #0a0a0f;
-  --color-surface: #141419;
-  --color-surface-elevated: #1a1a21;
-  --color-surface-hover: #22222a;
-  --color-border: rgba(255, 255, 255, 0.08);
-  --color-border-light: rgba(255, 255, 255, 0.04);
+  /* Colors - Modern Library (iOS Style) */
+  --color-background: #1C1C1E;
+  /* Softer dark */
+  --color-surface: #2C2C2E;
+  /* Elevated surface */
+  --color-surface-elevated: #3A3A3C;
+  --color-surface-hover: #48484A;
 
-  /* Accent Colors */
-  --color-accent: #3b82f6;
-  --color-accent-light: #60a5fa;
-  --color-accent-dark: #2563eb;
-  --color-accent-secondary: #a855f7;
-  --color-accent-orange: #f97316;
-  --color-accent-dim: rgba(59, 130, 246, 0.15);
-  --color-accent-glow: rgba(59, 130, 246, 0.25);
+  /* Separators */
+  --color-border: rgba(255, 255, 255, 0.12);
+  --color-border-light: rgba(255, 255, 255, 0.08);
 
-  /* Text */
-  --color-text: #ffffff;
-  --color-text-secondary: rgba(255, 255, 255, 0.65);
-  --color-text-muted: rgba(255, 255, 255, 0.4);
+  /* Accent Colors - Calmer, Trustworthy */
+  --color-accent: #0A84FF;
+  /* iOS Blue */
+  --color-accent-light: #5E5CE6;
+  --color-accent-dark: #007AFF;
+  --color-accent-secondary: #ff9f0a;
+  /* Warm Orange */
+  --color-accent-dim: rgba(10, 132, 255, 0.15);
+  --color-accent-glow: rgba(10, 132, 255, 0.1);
+
+  /* Text - High Legibility */
+  --color-text: #FFFFFF;
+  --color-text-secondary: #AEAEB2;
+  --color-text-muted: #8E8E93;
 
   /* Status */
-  --color-success: #22c55e;
-  --color-error: #ef4444;
-  --color-warning: #f59e0b;
+  --color-success: #32D74B;
+  --color-error: #FF453A;
+  --color-warning: #FFD60A;
 
   /* Spacing */
-  --spacing-xs: 6px;
-  --spacing-sm: 12px;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
   --spacing-md: 16px;
   --spacing-lg: 24px;
   --spacing-xl: 32px;
 
-  /* Border Radius - More Rounded */
-  --radius-sm: 12px;
-  --radius-md: 16px;
-  --radius-lg: 20px;
-  --radius-xl: 28px;
-  --radius-pill: 50px;
+  /* Border Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-pill: 100px;
 
-  /* Shadows */
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.5);
-  --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.6);
-  --shadow-accent: 0 4px 20px rgba(59, 130, 246, 0.3);
+  /* Shadows - Subtle */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.4);
+  --shadow-accent: 0 4px 12px rgba(10, 132, 255, 0.25);
 
   /* Safe Areas */
-  --safe-top: env(safe-area-inset-top, 0px);
-  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-top: env(safe-area-inset-top, 20px);
+  --safe-bottom: env(safe-area-inset-bottom, 20px);
 
   /* Layout */
-  --nav-height: 70px;
+  --nav-height: 60px;
+  /* Reduced specific height */
 }
 
 /* ---------- Reset & Base ---------- */
@@ -84,20 +90,7 @@ body {
   overflow-x: hidden;
 }
 
-/* Subtle gradient background */
-body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background:
-    radial-gradient(ellipse 100% 100% at 0% 0%, rgba(99, 102, 241, 0.08), transparent 50%),
-    radial-gradient(ellipse 80% 80% at 100% 100%, rgba(168, 85, 247, 0.06), transparent 50%);
-  pointer-events: none;
-  z-index: -1;
-}
+/* Clean background without gradient overlay */
 
 #root {
   min-height: 100vh;
@@ -355,11 +348,12 @@ body::before {
 }
 
 /* ---------- Today Section ---------- */
+/* ---------- Today Section ---------- */
 .today-section {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-xl);
-  padding: var(--spacing-lg);
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: var(--spacing-md) 0;
   margin-bottom: var(--spacing-lg);
 }
 
@@ -367,61 +361,71 @@ body::before {
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
-  margin-bottom: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+  padding: 0 var(--spacing-md);
 }
 
 .today-section__icon {
   font-size: 1.5rem;
+  display: none;
+  /* Hide icon - per critique 'typography dominates' */
 }
 
 .today-section__title {
-  font-size: 1.1rem;
-  font-weight: 600;
+  font-size: 1.3rem;
+  /* Larger */
+  font-weight: 700;
   flex: 1;
+  color: var(--color-text);
 }
 
 .today-section__date {
-  font-size: 0.8rem;
-  color: var(--color-accent-light);
-  background: var(--color-accent-dim);
-  padding: 4px 12px;
-  border-radius: var(--radius-pill);
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
   font-weight: 500;
 }
 
 /* ---------- Song Card ---------- */
+/* ---------- Song List Item (formerly Card) ---------- */
 .song-card {
   display: flex;
   align-items: center;
   gap: var(--spacing-md);
-  padding: var(--spacing-md) var(--spacing-lg);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  padding: var(--spacing-md) 0;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--color-border-light);
+  border-radius: 0;
   text-decoration: none;
   color: inherit;
   cursor: pointer;
-  transition: all 0.2s ease;
-  margin-bottom: var(--spacing-sm);
+  transition: background-color 0.2s ease;
+  margin-bottom: 0;
 }
 
 .song-card:hover {
   background: var(--color-surface-hover);
-  border-color: var(--color-accent-dim);
+  border-color: transparent;
+  padding-left: var(--spacing-sm);
+  padding-right: var(--spacing-sm);
+  margin-left: calc(-1 * var(--spacing-sm));
+  margin-right: calc(-1 * var(--spacing-sm));
+  border-radius: var(--radius-sm);
 }
 
 .song-card__number {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: var(--radius-md);
-  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-secondary));
-  color: white;
-  font-weight: 600;
-  font-size: 0.9rem;
+  width: 32px;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+  font-size: 1rem;
   flex-shrink: 0;
+  font-feature-settings: "tnum";
 }
 
 .song-card__content {
@@ -430,85 +434,90 @@ body::before {
 }
 
 .song-card__title {
-  font-size: 0.95rem;
-  font-weight: 500;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin-bottom: 2px;
+  font-size: 1.1rem;
+  /* ~17-18px */
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 4px;
+  line-height: 1.3;
 }
 
 .song-card__categories {
   display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
 }
 
 .song-card__category {
-  font-size: 0.7rem;
-  color: var(--color-text-muted);
-  background: var(--color-surface-hover);
-  padding: 2px 8px;
-  border-radius: var(--radius-pill);
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  background: transparent;
+  padding: 0;
 }
 
 .song-card__arrow {
-  color: var(--color-text-muted);
+  color: var(--color-border);
   flex-shrink: 0;
 }
 
 .song-card:hover .song-card__arrow {
-  color: var(--color-accent-light);
+  color: var(--color-text-secondary);
 }
 
-/* ---------- Category Cards ---------- */
+/* ---------- Category List Item ---------- */
 .categories-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 
 .category-card {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  justify-content: center;
-  gap: var(--spacing-xs);
-  min-height: 140px;
-  padding: var(--spacing-md);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-xl);
+  justify-content: flex-start;
+  gap: var(--spacing-md);
+  min-height: auto;
+  padding: var(--spacing-md) 0;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--color-border-light);
+  border-radius: 0;
   text-decoration: none;
   color: inherit;
-  transition: all 0.25s ease;
+  transition: background-color 0.2s ease;
 }
 
 .category-card:hover {
-  background: var(--color-surface-elevated);
-  border-color: var(--color-accent-dim);
-  transform: scale(1.02);
+  background: var(--color-surface-hover);
+  padding-left: var(--spacing-sm);
+  padding-right: var(--spacing-sm);
+  margin-left: calc(-1 * var(--spacing-sm));
+  margin-right: calc(-1 * var(--spacing-sm));
+  border-radius: var(--radius-sm);
+  transform: none;
 }
 
 .category-card__icon {
-  font-size: 2rem;
+  font-size: 1.5rem;
+  width: 40px;
+  display: flex;
+  justify-content: center;
 }
 
 .category-card__name {
-  font-size: 0.8rem;
-  font-weight: 600;
-  text-align: center;
-  line-height: 1.3;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
+  font-size: 1.1rem;
+  font-weight: 500;
+  text-align: left;
+  flex: 1;
 }
 
 .category-card__count {
-  font-size: 0.7rem;
-  color: var(--color-accent-light);
-  background: var(--color-accent-dim);
-  padding: 2px 10px;
-  border-radius: var(--radius-pill);
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
 }
 
 /* ---------- Search Input ---------- */
