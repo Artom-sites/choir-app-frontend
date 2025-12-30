@@ -23,9 +23,9 @@ function BotSongsPage() {
     async function loadBotSongs() {
         setLoading(true)
         try {
-            // Load songs from "Інше" category (ID 10) - these are bot-uploaded
-            const result = await api.getSongs({ categoryId: 10 })
-            setSongs(result.songs || result || [])
+            // Load songs without any category - these are bot-uploaded
+            const result = await api.request('/api/songs/uncategorized')
+            setSongs(result.songs || [])
         } catch (err) {
             console.error('Failed to load songs:', err)
         } finally {
@@ -40,10 +40,8 @@ function BotSongsPage() {
                 method: 'PUT',
                 body: JSON.stringify({ categoryId })
             })
-            // Remove from list if moved to different category
-            if (categoryId !== 10) {
-                setSongs(prev => prev.filter(s => s.id !== songId))
-            }
+            // Remove from list (song now has a category)
+            setSongs(prev => prev.filter(s => s.id !== songId))
             setSelectedSong(null)
             setSelectedCategory(null)
             await refreshSongs()
@@ -108,7 +106,7 @@ function BotSongsPage() {
                             <div className="song-card__content">
                                 <h3 className="song-card__title">{song.title}</h3>
                                 <div className="song-card__categories">
-                                    <span className="song-card__category">Інше</span>
+                                    <span className="song-card__category" style={{ opacity: 0.5, fontStyle: 'italic' }}>Без категорії</span>
                                 </div>
                             </div>
                             <div style={{ display: 'flex', gap: '8px' }}>
