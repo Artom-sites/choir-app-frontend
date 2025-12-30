@@ -7,7 +7,7 @@ import api from '../api/client'
 
 function BotSongsPage() {
     const navigate = useNavigate()
-    const { categories, refreshSongs } = useSongs()
+    const { categories, refresh } = useSongs()
     const { isAdmin } = useAuth()
 
     const [songs, setSongs] = useState([])
@@ -44,7 +44,7 @@ function BotSongsPage() {
             setSongs(prev => prev.filter(s => s.id !== songId))
             setSelectedSong(null)
             setSelectedCategory(null)
-            await refreshSongs()
+            await refresh()
         } catch (err) {
             console.error('Failed to update category:', err)
             alert('Помилка оновлення категорії')

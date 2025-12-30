@@ -22,6 +22,9 @@ class ApiClient {
             headers['X-User-Id'] = this.userId
         }
 
+        // Debug logging
+        console.log('API Request:', endpoint, 'userId:', this.userId, 'headers:', headers)
+
         const response = await fetch(url, {
             ...options,
             headers
