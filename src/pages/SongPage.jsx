@@ -1,59 +1,27 @@
-import { useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
-import { ArrowLeft, FileText, Send, Loader } from 'lucide-react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { ArrowLeft, FileText } from 'lucide-react'
 import { useSongs } from '../context/SongsContext'
-import api from '../api/client'
 
 function SongPage() {
-    const { songId } = useParams()
+    const { id } = useParams()
     const navigate = useNavigate()
     const { getSongById } = useSongs()
-    const [sending, setSending] = useState(false)
-    const [sent, setSent] = useState(false)
-    const [error, setError] = useState(null)
+    const song = getSongById(id)
 
-    const song = getSongById(songId)
-
-    if (!song) {
-        return (
-            <div className="empty-state">
-                <span className="empty-state__icon">❓</span>
-                <p className="empty-state__text">Пісню не знайдено</p>
-                <button
-                    onClick={() => navigate('/')}
-                    style={{ color: 'var(--color-accent)', background: 'none', border: 'none', cursor: 'pointer' }}
-                >
-                    Повернутися на головну
-                </button>
-            </div>
-        )
-    }
+    if (!song) return null
 
     const categoryNames = song.categories?.map(c => c.name).filter(Boolean) || []
 
-    // Send PDF via Telegram bot
-    const sendPdfToTelegram = async () => {
-        if (sending || sent) return
-
-        setSending(true)
-        setError(null)
-
-        try {
-            await api.sendPdf(song.id)
-            setSent(true)
-
-            // Show success briefly
-            setTimeout(() => setSent(false), 3000)
-        } catch (err) {
-            console.error('Error sending PDF:', err)
-            setError('Не вдалося надіслати. Спробуйте ще раз.')
-        } finally {
-            setSending(false)
+    function handleOpenPdf() {
+        if (window.Telegram?.WebApp) {
+            window.Telegram.WebApp.openLink(song.pdfPath, { try_instant_view: false })
+        } else {
+            window.open(song.pdfPath, '_blank')
         }
     }
 
     return (
-        <div className="song-page">
+        <div style={{ padding: '0 0 80px 0' }}>
             <button className="song-page__back" onClick={() => navigate(-1)}>
                 <ArrowLeft size={18} />
                 Назад
@@ -62,7 +30,7 @@ function SongPage() {
             <h1 className="song-page__title">{song.title}</h1>
 
             {song.author && (
-                <p className="song-page__author">{song.author}</p>
+                <div className="song-page__author">{song.author}</div>
             )}
 
             {categoryNames.length > 0 && (
@@ -78,43 +46,20 @@ function SongPage() {
             {song.pdfPath ? (
                 <button
                     className="song-page__open-btn"
-                    onClick={sendPdfToTelegram}
-                    disabled={sending}
-                    style={sent ? { background: 'var(--color-success)' } : {}}
+                    onClick={handleOpenPdf}
                 >
-                    {sending ? (
-                        <>
-                            <Loader size={24} className="spinning" />
-                            Надсилаємо...
-                        </>
-                    ) : sent ? (
-                        <>
-                            ✓ Надіслано в Telegram
-                        </>
-                    ) : (
-                        <>
-                            <Send size={24} />
-                            Отримати ноти
-                        </>
-                    )}
+                    <FileText size={20} />
+                    Відкрити ноти
                 </button>
             ) : (
-                <div style={{
-                    padding: '24px',
-                    textAlign: 'center',
-                    background: 'var(--color-surface)',
-                    borderRadius: '12px',
-                    color: 'var(--color-text-muted)'
-                }}>
-                    📄 PDF ще не завантажено
+                <div className="empty-state">
+                    <p className="empty-state__text">PDF файл відсутній</p>
                 </div>
             )}
 
-            {error && (
-                <p style={{ color: 'var(--color-error)', marginTop: '12px', textAlign: 'center' }}>
-                    {error}
-                </p>
-            )}
+            <div style={{ marginTop: '24px', opacity: 0.6, fontSize: '0.8rem', textAlign: 'center' }}>
+                <p>ID: {song.id}</p>
+            </div>
         </div>
     )
 }
