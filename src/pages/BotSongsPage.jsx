@@ -7,8 +7,8 @@ import api from '../api/client'
 
 function BotSongsPage() {
     const navigate = useNavigate()
-    const { categories, refresh } = useSongs()
-    const { isAdmin } = useAuth()
+    const { categories, refresh, addSongToChoir } = useSongs()
+    const { isAdmin, currentChoir } = useAuth()
 
     const [songs, setSongs] = useState([])
     const [loading, setLoading] = useState(true)
@@ -36,11 +36,18 @@ function BotSongsPage() {
     async function handleCategoryChange(songId, categoryId) {
         setUpdating(true)
         try {
+            // First assign category
             await api.request(`/api/songs/${songId}/category`, {
                 method: 'PUT',
                 body: JSON.stringify({ categoryId })
             })
-            // Remove from list (song now has a category)
+
+            // Then add song to choir so it appears in categories
+            if (currentChoir) {
+                await addSongToChoir(songId)
+            }
+
+            // Remove from list (song now has a category and is in choir)
             setSongs(prev => prev.filter(s => s.id !== songId))
             setSelectedSong(null)
             setSelectedCategory(null)
@@ -82,11 +89,6 @@ function BotSongsPage() {
             }}>
                 Тут відображаються пісні, завантажені через бота.
                 Призначте їм категорію або перегляньте.
-            </p>
-
-            {/* Debug - remove after testing */}
-            <p style={{ fontSize: '0.7rem', color: '#666', marginBottom: '8px' }}>
-                Debug: userId = {api.userId || 'NOT SET'}
             </p>
 
             {loading ? (
