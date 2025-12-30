@@ -83,19 +83,11 @@ function AdminPage() {
                 </p>
             </div>
 
-            {/* Admin actions */}
+            {/* Admin actions - placeholder for future features */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <Link to="/admin/library" className="song-card" style={{ textDecoration: 'none' }}>
-                    <span className="song-card__number" style={{ background: 'var(--color-accent-secondary)' }}>
-                        <Library size={16} />
-                    </span>
-                    <div className="song-card__content">
-                        <h3 className="song-card__title">Бібліотека пісень</h3>
-                        <div className="song-card__categories">
-                            <span className="song-card__category">Всі завантажені пісні</span>
-                        </div>
-                    </div>
-                </Link>
+                <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>
+                    Щоб додати пісні, натисніть "+" і оберіть "Додати пісню"
+                </p>
             </div>
 
             <hr style={{

@@ -10,16 +10,7 @@ function BottomNav() {
 
     const handleAddSong = () => {
         setShowMenu(false)
-        // Show instruction to use bot
-        if (window.Telegram?.WebApp) {
-            window.Telegram.WebApp.showPopup({
-                title: '📤 Додати пісню',
-                message: 'Щоб додати нову пісню, надішліть PDF файл боту @musicviewer_bot у Telegram.\n\nПісня автоматично з\'явиться в категорії "Інше".',
-                buttons: [{ type: 'ok' }]
-            })
-        } else {
-            alert('Щоб додати нову пісню, надішліть PDF файл боту @musicviewer_bot у Telegram.')
-        }
+        navigate('/admin/bot-songs')
     }
 
     const handleAddRepertoire = () => {

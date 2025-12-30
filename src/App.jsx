@@ -17,6 +17,7 @@ import AdminPage from './pages/AdminPage'
 import AddSongPage from './pages/AddSongPage'
 import SetRepertoirePage from './pages/SetRepertoirePage'
 import AddFromLibraryPage from './pages/AddFromLibraryPage'
+import BotSongsPage from './pages/BotSongsPage'
 import { AuthProvider, useAuth } from './context/AuthContext'
 import { SongsProvider } from './context/SongsContext'
 
@@ -155,6 +156,7 @@ function AppRoutes() {
               <Route path="/admin/repertoire" element={<SetRepertoirePage />} />
               <Route path="/admin/set-repertoire" element={<SetRepertoirePage />} />
               <Route path="/admin/library" element={<AddFromLibraryPage />} />
+              <Route path="/admin/bot-songs" element={<BotSongsPage />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </main>
