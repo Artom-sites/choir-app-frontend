@@ -13,10 +13,13 @@ function SongPage() {
     const categoryNames = song.categories?.map(c => c.name).filter(Boolean) || []
 
     function handleOpenPdf() {
+        // Use Google Docs Viewer for reliable PDF viewing on mobile
+        const viewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(song.pdfPath)}&embedded=true`
+
         if (window.Telegram?.WebApp) {
-            window.Telegram.WebApp.openLink(song.pdfPath, { try_instant_view: false })
+            window.Telegram.WebApp.openLink(viewerUrl)
         } else {
-            window.open(song.pdfPath, '_blank')
+            window.open(viewerUrl, '_blank')
         }
     }
 
