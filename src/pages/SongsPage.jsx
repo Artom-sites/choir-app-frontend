@@ -56,29 +56,41 @@ function SongsPage() {
 
     // Show categories
     return (
-        <div>
+        <div style={{ paddingBottom: '80px' }}>
             <h2 className="page-title">
-                <Music size={20} />
+                <Music size={24} style={{ color: 'var(--color-accent)' }} />
                 Пісні
             </h2>
 
-            <div className="categories-grid">
-                {categories.map(category => {
-                    const songCount = getSongsByCategory(category.id).length
+            {!categories || categories.length === 0 ? (
+                <div className="empty-state">
+                    <span className="empty-state__icon">📂</span>
+                    <p className="empty-state__text">Категорії завантажуються або відсутні</p>
+                </div>
+            ) : (
+                <div className="categories-grid">
+                    {categories.map(category => {
+                        const songCount = getSongsByCategory(category.id)?.length || 0
 
-                    return (
-                        <button
-                            key={category.id}
-                            className="category-card"
-                            onClick={() => setSelectedCategory(category)}
-                        >
-                            <div className="category-card__icon">{category.icon}</div>
-                            <div className="category-card__name">{category.name}</div>
-                            <div className="category-card__count">({songCount})</div>
-                        </button>
-                    )
-                })}
-            </div>
+                        return (
+                            <button
+                                key={category.id}
+                                className="category-card"
+                                onClick={() => setSelectedCategory(category)}
+                            >
+                                <div className="category-card__icon">
+                                    {category.icon || '🎵'}
+                                </div>
+                                <div className="category-card__name">{category.name}</div>
+                                <div className="category-card__count">({songCount})</div>
+                            </button>
+                        )
+                    })}
+                </div>
+            )}
+
+            {/* Debug info (hidden in prod, but helpful if user reports black screen) */}
+            {/* <div style={{display: 'none'}}>{JSON.stringify(categories)}</div> */}
         </div>
     )
 }

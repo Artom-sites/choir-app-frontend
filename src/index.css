@@ -129,53 +129,71 @@ body {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding: var(--spacing-sm) var(--spacing-md);
-  padding-bottom: calc(var(--spacing-sm) + var(--safe-bottom));
-  background: rgba(13, 17, 23, 0.95);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-  border-top: 1px solid var(--color-border);
+  padding: 8px 16px;
+  padding-bottom: calc(8px + var(--safe-bottom));
+  background: rgba(28, 28, 30, 0.96);
+  /* System Gray 6 equivalent */
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid var(--color-border-light);
+  z-index: 100;
 }
 
 .nav-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-  padding: var(--spacing-sm) var(--spacing-md);
-  border-radius: var(--radius-lg);
-  color: var(--color-text-muted);
+  justify-content: center;
+  gap: 2px;
+  padding: 4px 12px;
   text-decoration: none;
+  color: var(--color-text-muted);
   font-size: 0.7rem;
   font-weight: 500;
   transition: all 0.2s ease;
+  min-width: 60px;
 }
 
 .nav-item.active {
-  color: var(--color-accent-light);
-  background: var(--color-accent-dim);
+  color: var(--color-accent);
+  background: transparent;
 }
 
 .nav-item__icon {
   width: 24px;
   height: 24px;
+  stroke-width: 2px;
 }
 
+/* Central Plus Button - Modern Style (e.g. like iOS Tab Bar central item) */
 .nav-item--plus {
   background: var(--color-accent);
   color: white;
   border: none;
   cursor: pointer;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  /* Soft square */
   padding: 0;
-  margin: -8px 0;
+  margin: 0 8px;
+  /* Spacing */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(10, 132, 255, 0.3);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.nav-item--plus:active {
+  transform: scale(0.95);
+  background: var(--color-accent-dark);
 }
 
 .nav-item--plus.active {
-  background: var(--color-surface-elevated);
-  color: var(--color-text);
+  background: var(--color-text);
+  /* White when menu open */
+  color: black;
 }
 
 /* ---------- Choir Selector Page ---------- */
