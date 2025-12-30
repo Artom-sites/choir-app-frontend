@@ -3,10 +3,10 @@ import { ArrowLeft, FileText } from 'lucide-react'
 import { useSongs } from '../context/SongsContext'
 
 function SongPage() {
-    const { id } = useParams()
+    const { songId } = useParams()
     const navigate = useNavigate()
     const { getSongById } = useSongs()
-    const song = getSongById(id)
+    const song = getSongById(songId)
 
     if (!song) return null
 
